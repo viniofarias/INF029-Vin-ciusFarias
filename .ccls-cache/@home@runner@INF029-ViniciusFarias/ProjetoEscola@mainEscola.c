@@ -79,15 +79,43 @@ int main(void) {
 		          break;
 		        }
 		        case 3: {
+							int matricula = 0;
+							int validaMatricula = 0;
 		          puts("Deletar Aluno");
+		          setbuf(stdin, 0);
 		          while(1){
-		            puts("Digite a posição do Aluno cadastrado na lista que você quer Editar");
-		            scanf("%d",&validaPosicao);
-		            if(validaPosicao < numero_Aluno){
-		              cadastroAluno(listaAlunos, validaPosicao);
+		            puts("Digite a matrícula do Aluno cadastrado que voce deseja DELETAR");
+		            scanf("%d",&matricula);
+		            for(int repeat = 0; repeat<numero_Aluno; repeat++){
+		              if(matricula == listaAlunos[repeat].Matricula){
+		                listaAlunos[repeat].Matricula = 0;
+		                listaAlunos[repeat].Nome[0] = '\0';
+		                listaAlunos[repeat].CPF[0] = '\0';
+		                listaAlunos[repeat].Sexo = '\0';
+		                listaAlunos[repeat].dataNasc.dia = 0;
+		                listaAlunos[repeat].dataNasc.mes = 0;
+		                listaAlunos[repeat].dataNasc.ano = 0;
+		                
+		                for(int reposiciona = repeat; reposiciona < numero_Aluno - 1; reposiciona++){
+		                  listaAlunos[reposiciona].Matricula = listaAlunos[reposiciona+1].Matricula;
+		                  strcpy(listaAlunos[reposiciona].Nome, listaAlunos[reposiciona+1].Nome);
+		                  strcpy(listaAlunos[reposiciona].CPF, listaAlunos[reposiciona+1].CPF);
+		                  listaAlunos[reposiciona].Sexo = listaAlunos[reposiciona+1].Sexo;
+		                  listaAlunos[reposiciona].dataNasc.dia = listaAlunos[reposiciona+1].dataNasc.dia;
+		                  listaAlunos[reposiciona].dataNasc.mes = listaAlunos[reposiciona+1].dataNasc.mes;
+		                  listaAlunos[reposiciona].dataNasc.mes = listaAlunos[reposiciona+1].dataNasc.mes;
+		                }
+		                
+		                validaMatricula = 1;
+		                break;
+		              }
+		            }
+		            if(validaMatricula == 1){
+		              puts("Aluno deletado");
+		              numero_Aluno--;
 		              break;
 		            }else{
-		              puts("A posição não existe ou não possuem aluno cadastrado");
+		              puts("******A matrícula digitada ainda não existe******");
 		            }
 		          }
 		          break;
@@ -107,12 +135,14 @@ int main(void) {
 	    case 4: {
 	      puts("modulo Relatórios");
 	      for (int i = 0; i < numero_Aluno; i++) {
-	        printf("\n%d\n", listaAlunos[i].Matricula);
-	        printf("%s\n", listaAlunos[i].Nome);
-	        printf("%s\n", listaAlunos[i].CPF);
-	        printf("%c\n", listaAlunos[i].Sexo);
-	        printf("%d/%d/%d\n", listaAlunos[i].dataNasc.dia,
-	               listaAlunos[i].dataNasc.mes, listaAlunos[i].dataNasc.ano);
+	        if(listaAlunos[i].Matricula != 0){
+  	        printf("\n%d\n", listaAlunos[i].Matricula);
+  	        printf("%s\n", listaAlunos[i].Nome);
+  	        printf("%s\n", listaAlunos[i].CPF);
+  	        printf("%c\n", listaAlunos[i].Sexo);
+  	        printf("%d/%d/%d\n", listaAlunos[i].dataNasc.dia,
+  	               listaAlunos[i].dataNasc.mes, listaAlunos[i].dataNasc.ano);
+	        }
 	      }
 	      break;
 	    }
