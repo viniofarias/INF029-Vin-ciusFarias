@@ -2,6 +2,7 @@
 #include <string.h>
 #define max_Alunos 5
 #define max_Prof 5
+#define max_Disciplina 5
 
 typedef struct {
   int dia;
@@ -9,33 +10,35 @@ typedef struct {
   int ano;
 } data;
 
-typedef struct Cadastro {
+typedef struct Pessoa {
   int Matricula;
   char Nome[30];
   char CPF[15];
   char Sexo;
   data dataNasc;
-} Cadastro;
+} Pessoa;
 
-/*typedef struct {
-  int Matricula;
+typedef struct Disciplina {
   char Nome[30];
-  char CPF[15];
-  char Sexo;
-  data dataNasc;
-} Professor;*/
+  int Codigo;
+  int Semestre;
+  int Matricula_Professor;
+  int listaMatriculados[max_Alunos];
+} Disciplina;
 
 int menuGeral(void);
 int menuAluno(void);
 int menuProf(void);
+int menuDisciplina(void);
 int menuRelatorio(void);
-void cadastro(struct Cadastro *listaAlunos, int numero_Aluno);
-int excluirCadastro(struct Cadastro *listaAlunos, int matricula, int numero_Aluno);
+void cadastro(struct Pessoa *lista, int numero);
+int excluirCadastro(struct Pessoa *lista, int matricula, int numero);
 
 int main(void) {
-  Cadastro listaAlunos[max_Alunos];
-  Cadastro listaProf[max_Prof];
-  int opcao = 1, numero_Aluno = 0, numero_Prof = 0;
+  Pessoa listaAlunos[max_Alunos];
+  Pessoa listaProf[max_Prof];
+	Disciplina listaDisciplina[max_Disciplina];
+  int opcao = 1, numero_Aluno = 0, numero_Prof = 0, numero_Disciplina = 0;
   printf("Projeto Escola\n");
   while (opcao != 0) {
     opcao = menuGeral();
@@ -175,6 +178,93 @@ int main(void) {
 	    }
 	    case 3: {
 	      puts("modulo disciplina");
+				int opcaoDisciplina = 1;
+				while(opcaoDisciplina !=0){
+					opcaoDisciplina = menuDisciplina();
+					switch (opcaoDisciplina){
+						case 0:{
+							break;
+						}
+						case 1:{
+							setbuf(stdin, 0);
+							int ln = 0;
+							int validaCodigo = 0, validaMatricula = 0;
+							puts("===============Inserir Disciplina===============");
+							
+							puts("Digite o nome da disciplina: ");
+							getchar();
+							fgets(listaDisciplina[numero_Disciplina].Nome, 30, stdin);
+							ln = strlen(listaDisciplina[numero_Disciplina].Nome) - 1;
+							if (listaDisciplina[numero_Disciplina].Nome[ln] == '\n') {
+								listaDisciplina[numero_Disciplina].Nome[ln] = '\0';
+							}
+
+							while(1){
+								int codigoAtivo = 0;
+								puts("Digite o código da disciplina: ");
+								scanf("%d", &validaCodigo);
+								if(validaCodigo > 0){
+									for(int i = 0; i<numero_Disciplina; i++){
+										if(listaDisciplina[i].Codigo == validaCodigo){
+											codigoAtivo = 1;
+											break;
+										}
+									}
+									if(codigoAtivo == 0){
+										listaDisciplina[numero_Disciplina].Codigo = validaCodigo;
+										break;
+									}else{
+										puts("Esse código já existe");
+									}
+								}else{
+									puts("Código Inválido");
+								}
+							}
+
+							while(1){
+								int professorAtivo = 0;
+								puts("Digite a matrícula do Professor");
+								scanf("%d",&validaMatricula);
+
+								for(int i = 0; i<numero_Prof;i++){									//Fazer função(Valida matricula);
+									if(listaProf[i].Matricula == validaMatricula){
+										listaDisciplina[numero_Disciplina].Matricula_Professor = validaMatricula;
+										professorAtivo = 1;
+										break;
+									}
+								}
+								if(professorAtivo == 1){
+									break;
+								}else{
+									puts("Essa matrícula não existe");
+								}		
+							}
+
+							numero_Disciplina++;						
+							break;
+						}
+						case 2:{
+							puts("===============Editar Disciplina===============");
+							break;
+						}
+						case 3:{
+							puts("===============Deletar Disciplina===============");
+							break;
+						}
+						case 4:{
+							puts("===============Cadastrar aluno na Disciplina===============");
+							break;
+						}
+						case 5:{
+							puts("===============Deletar aluno da Disciplina===============");
+							break;
+						}
+						default:{
+							puts("Opção Inválida");
+							break;
+						}
+					}
+				}
 	      break;
 	    }
 	    case 4: {
@@ -187,6 +277,7 @@ int main(void) {
 	            break;
 	          }
 	          case 1:{
+							puts("=============Alunos Cadastrados=============");
 	            for (int i = 0; i < numero_Aluno; i++) {
 	              if (listaAlunos[i].Matricula != 0) {
     	          printf("\n%d\n", listaAlunos[i].Matricula);
@@ -200,18 +291,41 @@ int main(void) {
       	      break;
 	          }
 	          case 2:{
+							puts("=============Professores Cadastrados=============");
 	            for (int i = 0; i < numero_Prof; i++) {
 	              if (listaProf[i].Matricula != 0) {
-    	          printf("\n%d\n", listaProf[i].Matricula);
-    	          printf("%s\n", listaProf[i].Nome);
-    	          printf("%s\n", listaProf[i].CPF);
-    	          printf("%c\n", listaProf[i].Sexo);
-    	          printf("%d/%d/%d\n", listaProf[i].dataNasc.dia,
-    	                 listaProf[i].dataNasc.mes, listaProf[i].dataNasc.ano);
+	    	          printf("\n%d\n", listaProf[i].Matricula);
+	    	          printf("%s\n", listaProf[i].Nome);
+	    	          printf("%s\n", listaProf[i].CPF);
+	    	          printf("%c\n", listaProf[i].Sexo);
+	    	          printf("%d/%d/%d\n", listaProf[i].dataNasc.dia,
+	    	                 listaProf[i].dataNasc.mes, listaProf[i].dataNasc.ano);
       	        }
       	      }
       	      break;
 	          }
+						case 3:{
+							puts("=============Disciplinas Cadastradas=============");
+							for(int i = 0; i<numero_Disciplina; i++){
+								if(listaDisciplina[i].Codigo != 0){
+									printf("\n%d\n", listaDisciplina[i].Codigo);
+	    	          printf("%s\n", listaDisciplina[i].Nome);
+	    	          for (int j = 0; j < numero_Prof; j++) {
+			              if (listaProf[j].Matricula == listaDisciplina[i].Matricula_Professor) {
+											puts("***Professor que leciona a Disciplina***");
+			    	          printf("\n%d\n", listaProf[j].Matricula);
+			    	          printf("%s\n", listaProf[j].Nome);
+			    	          printf("%s\n", listaProf[j].CPF);
+			    	          printf("%c\n", listaProf[j].Sexo);
+			    	          printf("%d/%d/%d\n", listaProf[j].dataNasc.dia,
+			    	                 listaProf[j].dataNasc.mes, listaProf[j].dataNasc.ano);
+											break;
+	      	        	}
+      	      		}
+								}
+							}
+							break;
+						}
 	        }
 	      }
 	      break;
@@ -225,7 +339,7 @@ int main(void) {
   return 1;
 }
 
-int menuGeral(void) {
+int menuGeral() {
   int select = 0;
   printf("Selecione uma opção\n");
   printf("Sair -- 0\n");
@@ -259,6 +373,19 @@ int menuProf() {
   return select;
 }
 
+int menuDisciplina(){
+  int select = 0;
+  printf("Selecione uma opção\n");
+  printf("voltar -- 0\n");
+  printf("Inserir Disciplina -- 1\n");
+  printf("Editar Disciplina -- 2\n");
+  printf("Deletar Disciplina -- 3\n");
+	printf("Inserir Aluno na Disciplina -- 4\n");
+	printf("Excluiir Aluno da Disciplina -- 5\n");
+  scanf("%d", &select);
+  return select;	
+}
+
 int menuRelatorio(){
   int select = 0;
   printf("Selecione uma opção\n");
@@ -270,7 +397,7 @@ int menuRelatorio(){
   return select;
 }
 
-void cadastro(struct Cadastro *lista, int numero) {
+void cadastro(struct Pessoa *lista, int numero) {
   setbuf(stdin, 0);
   int ln = 0;
   char validacpf[15];
@@ -315,7 +442,7 @@ void cadastro(struct Cadastro *lista, int numero) {
         &lista[numero].dataNasc.ano);
 }
 
-int excluirCadastro(struct Cadastro *lista, int matricula, int numero) {
+int excluirCadastro(struct Pessoa *lista, int matricula, int numero) {
   for (int repeat = 0; repeat < numero; repeat++) {
     if (matricula == lista[repeat].Matricula) {
       lista[repeat].Matricula = 0;
