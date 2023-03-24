@@ -33,6 +33,7 @@ int menuDisciplina(void);
 int menuRelatorio(void);
 void cadastro(struct Pessoa *lista, int numero);
 int excluirCadastro(struct Pessoa *lista, int matricula, int numero);
+void inserirDisciplina(struct Disciplina *listaDisciplina, struct Pessoa *listaProf, int numero_Prof, int numero_Disciplina);
 
 int main(void) {
   Pessoa listaAlunos[max_Alunos];
@@ -186,61 +187,12 @@ int main(void) {
 							break;
 						}
 						case 1:{
-							setbuf(stdin, 0);
-							int ln = 0;
-							int validaCodigo = 0, validaMatricula = 0;
-							puts("===============Inserir Disciplina===============");
-							
-							puts("Digite o nome da disciplina: ");
-							getchar();
-							fgets(listaDisciplina[numero_Disciplina].Nome, 30, stdin);
-							ln = strlen(listaDisciplina[numero_Disciplina].Nome) - 1;
-							if (listaDisciplina[numero_Disciplina].Nome[ln] == '\n') {
-								listaDisciplina[numero_Disciplina].Nome[ln] = '\0';
-							}
-
-							while(1){
-								int codigoAtivo = 0;
-								puts("Digite o código da disciplina: ");
-								scanf("%d", &validaCodigo);
-								if(validaCodigo > 0){
-									for(int i = 0; i<numero_Disciplina; i++){
-										if(listaDisciplina[i].Codigo == validaCodigo){
-											codigoAtivo = 1;
-											break;
-										}
-									}
-									if(codigoAtivo == 0){
-										listaDisciplina[numero_Disciplina].Codigo = validaCodigo;
-										break;
-									}else{
-										puts("Esse código já existe");
-									}
-								}else{
-									puts("Código Inválido");
-								}
-							}
-
-							while(1){
-								int professorAtivo = 0;
-								puts("Digite a matrícula do Professor");
-								scanf("%d",&validaMatricula);
-
-								for(int i = 0; i<numero_Prof;i++){									//Fazer função(Valida matricula);
-									if(listaProf[i].Matricula == validaMatricula){
-										listaDisciplina[numero_Disciplina].Matricula_Professor = validaMatricula;
-										professorAtivo = 1;
-										break;
-									}
-								}
-								if(professorAtivo == 1){
-									break;
-								}else{
-									puts("Essa matrícula não existe");
-								}		
-							}
-
-							numero_Disciplina++;						
+							if(numero_Disciplina == max_Disciplina){
+								puts("A lista de Disciplinas ja está completa");
+							}else{
+								inserirDisciplina(listaDisciplina, listaProf, numero_Prof, numero_Disciplina);
+								numero_Disciplina++;
+							}					
 							break;
 						}
 						case 2:{
@@ -472,4 +424,59 @@ int excluirCadastro(struct Pessoa *lista, int matricula, int numero) {
     }
   }
 	return 1;
+}
+
+void inserirDisciplina(struct Disciplina *listaDisciplina, struct Pessoa *listaProf, int numero_Prof, int numero_Disciplina){
+	setbuf(stdin, 0);
+	int ln = 0;
+	int validaCodigo = 0, validaMatricula = 0;
+	puts("===============Inserir Disciplina===============");
+	
+	puts("Digite o nome da disciplina: ");
+	fgets(listaDisciplina[numero_Disciplina].Nome, 30, stdin);
+	ln = strlen(listaDisciplina[numero_Disciplina].Nome) - 1;
+	if (listaDisciplina[numero_Disciplina].Nome[ln] == '\n') {
+		listaDisciplina[numero_Disciplina].Nome[ln] = '\0';
+	}
+
+	while(1){
+		int codigoAtivo = 0;
+		puts("Digite o código da disciplina: ");
+		scanf("%d", &validaCodigo);
+		if(validaCodigo > 0){
+			for(int i = 0; i<numero_Disciplina; i++){
+				if(listaDisciplina[i].Codigo == validaCodigo){
+					codigoAtivo = 1;
+					break;
+				}
+			}
+			if(codigoAtivo == 0){
+				listaDisciplina[numero_Disciplina].Codigo = validaCodigo;
+				break;
+			}else{
+				puts("Esse código já existe");
+			}
+		}else{
+			puts("Código Inválido");
+		}
+	}
+
+	while(1){
+		int professorAtivo = 0;
+		puts("Digite a matrícula do Professor");
+		scanf("%d",&validaMatricula);
+
+		for(int i = 0; i<numero_Prof;i++){									//Fazer função(Valida matricula);
+			if(listaProf[i].Matricula == validaMatricula){
+				listaDisciplina[numero_Disciplina].Matricula_Professor = validaMatricula;
+				professorAtivo = 1;
+				break;
+			}
+		}
+		if(professorAtivo == 1){
+			break;
+		}else{
+			puts("Essa matrícula não existe");
+		}		
+	}
 }
