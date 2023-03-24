@@ -188,15 +188,31 @@ int main(void) {
 						}
 						case 1:{
 							if(numero_Disciplina == max_Disciplina){
-								puts("A lista de Disciplinas ja está completa");
+								puts("******A lista de Disciplinas ja está completa******");
 							}else{
+								puts("===============Inserir Disciplina===============");
 								inserirDisciplina(listaDisciplina, listaProf, numero_Prof, numero_Disciplina);
 								numero_Disciplina++;
 							}					
 							break;
 						}
 						case 2:{
+							int validaCodigo, disciplinaAtiva = 0, posicao;
 							puts("===============Editar Disciplina===============");
+							puts("Digite o código da Disciplina a ser editada");
+							scanf("%d",&validaCodigo);
+							for(int i = 0; i<numero_Disciplina; i++){
+								if(listaDisciplina[i].Codigo == validaCodigo){
+									disciplinaAtiva = 1;
+									posicao = i;
+									break;
+								}
+							}
+							if(disciplinaAtiva == 1){
+								inserirDisciplina(listaDisciplina, listaProf, numero_Prof, posicao);
+							}else{
+								puts("Essa disciplina ainda não existe");
+							}
 							break;
 						}
 						case 3:{
@@ -430,7 +446,6 @@ void inserirDisciplina(struct Disciplina *listaDisciplina, struct Pessoa *listaP
 	setbuf(stdin, 0);
 	int ln = 0;
 	int validaCodigo = 0, validaMatricula = 0;
-	puts("===============Inserir Disciplina===============");
 	
 	puts("Digite o nome da disciplina: ");
 	fgets(listaDisciplina[numero_Disciplina].Nome, 30, stdin);
