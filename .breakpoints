@@ -1,3 +1,12 @@
 {
-  "files": {}
+  "files": {
+    "ProjetoEscola/mainEscola.c": [
+      {
+        "id": "a7f5cb2b-2bfe-43d8-80cc-b5c0aee9db41",
+        "line": 237,
+        "version": 7707,
+        "index": 7028
+      }
+    ]
+  }
 }
