@@ -37,6 +37,8 @@ void inserirDisciplina(struct Disciplina *listaDisciplina, struct Pessoa *listaP
 int deletarDisciplina(struct Disciplina *listaDisciplina, int numero_Disciplina);
 int inserirAlunoDisciplina(struct Disciplina *listaDisciplina, struct Pessoa *listaAlunos, int numero_Aluno, int numero_Disciplina, int numero_Matriculado);
 int deletarAlunoDisciplina(struct Disciplina *listaDisciplina, int numero_Disciplina, int numero_Matriculado);
+void listagem(struct Pessoa *lista, int numero);
+void listagemDisciplina(struct Disciplina *listaDisciplina, struct Pessoa *listaProf, struct Pessoa *listaAlunos, int numero_Matriculado, int numero_Disciplina, int numero_Prof, int numero_Aluno);
 
 int main(void) {
   Pessoa listaAlunos[max_Alunos];
@@ -272,66 +274,16 @@ int main(void) {
 	          }
 	          case 1:{
 							puts("=============Alunos Cadastrados=============");
-	            for (int i = 0; i < numero_Aluno; i++) {
-	              if (listaAlunos[i].Matricula != 0) {
-    	          printf("\n%d\n", listaAlunos[i].Matricula);
-    	          printf("%s\n", listaAlunos[i].Nome);
-    	          printf("%s\n", listaAlunos[i].CPF);
-    	          printf("%c\n", listaAlunos[i].Sexo);
-    	          printf("%d/%d/%d\n", listaAlunos[i].dataNasc.dia,
-    	                 listaAlunos[i].dataNasc.mes, listaAlunos[i].dataNasc.ano);
-      	        }
-      	      }
+							listagem(listaAlunos, numero_Aluno);
       	      break;
 	          }
 	          case 2:{
 							puts("=============Professores Cadastrados=============");
-	            for (int i = 0; i < numero_Prof; i++) {
-	              if (listaProf[i].Matricula != 0) {
-	    	          printf("\n%d\n", listaProf[i].Matricula);
-	    	          printf("%s\n", listaProf[i].Nome);
-	    	          printf("%s\n", listaProf[i].CPF);
-	    	          printf("%c\n", listaProf[i].Sexo);
-	    	          printf("%d/%d/%d\n", listaProf[i].dataNasc.dia,
-	    	                 listaProf[i].dataNasc.mes, listaProf[i].dataNasc.ano);
-      	        }
-      	      }
+	            listagem(listaProf, numero_Prof);
       	      break;
 	          }
 						case 3:{
-							puts("=============Disciplinas Cadastradas=============");
-							for(int i = 0; i<numero_Disciplina; i++){
-								if(listaDisciplina[i].Codigo != 0){
-									printf("\n%d\n", listaDisciplina[i].Codigo);
-	    	          printf("%s\n", listaDisciplina[i].Nome);
-									printf("%d\n", listaDisciplina[i].Semestre);
-	    	          for (int j = 0; j < numero_Prof; j++) {
-			              if (listaProf[j].Matricula == listaDisciplina[i].Matricula_Professor) {
-											puts("***Professor que leciona a Disciplina***");
-			    	          printf("\n%d\n", listaProf[j].Matricula);
-			    	          printf("%s\n", listaProf[j].Nome);
-			    	          printf("%s\n", listaProf[j].CPF);
-			    	          printf("%c\n", listaProf[j].Sexo);
-			    	          printf("%d/%d/%d\n", listaProf[j].dataNasc.dia,
-			    	                 listaProf[j].dataNasc.mes, listaProf[j].dataNasc.ano);
-											break;
-	      	        	}
-      	      		}
-									puts("***Alunos Cadastrados***");
-									for(int j = 0; j < numero_Matriculado; j++){
-										for(int k = 0; k < numero_Aluno; k++){
-											if(listaDisciplina[i].listaMatriculados[j] == listaAlunos[k].Matricula){
-												printf("\n%d\n", listaAlunos[k].Matricula);
-				    	          printf("%s\n", listaAlunos[k].Nome);
-				    	          printf("%s\n", listaAlunos[k].CPF);
-				    	          printf("%c\n", listaAlunos[k].Sexo);
-				    	          printf("%d/%d/%d\n", listaAlunos[k].dataNasc.dia,
-				    	                 listaAlunos[k].dataNasc.mes, listaAlunos[k].dataNasc.ano);
-											}
-										}
-									}
-								}
-							}
+							listagemDisciplina(listaDisciplina,listaProf,listaAlunos,numero_Matriculado,numero_Disciplina,numero_Prof,numero_Aluno);
 							break;
 						}
 	        }
@@ -647,4 +599,53 @@ int deletarAlunoDisciplina(struct Disciplina *listaDisciplina, int numero_Discip
 		listaDisciplina[posicaoDisciplina].listaMatriculados[i] = listaDisciplina[posicaoDisciplina].listaMatriculados[i+1];
 	}
 	return 1;
+}
+
+void listagem(struct Pessoa *lista, int numero){
+	for (int i = 0; i < numero; i++) {
+		if (lista[i].Matricula != 0) {
+		printf("\n%d\n", lista[i].Matricula);
+		printf("%s\n", lista[i].Nome);
+		printf("%s\n", lista[i].CPF);
+		printf("%c\n", lista[i].Sexo);
+		printf("%d/%d/%d\n", lista[i].dataNasc.dia,
+					 lista[i].dataNasc.mes, lista[i].dataNasc.ano);
+		}
+	}
+}
+
+void listagemDisciplina(struct Disciplina *listaDisciplina, struct Pessoa *listaProf, struct Pessoa *listaAlunos, int numero_Matriculado, int numero_Disciplina, int numero_Prof, int numero_Aluno){
+	puts("=============Disciplinas Cadastradas=============");
+	for(int i = 0; i<numero_Disciplina; i++){
+		if(listaDisciplina[i].Codigo != 0){
+			printf("\n%d\n", listaDisciplina[i].Codigo);
+			printf("%s\n", listaDisciplina[i].Nome);
+			printf("%d\n", listaDisciplina[i].Semestre);
+			for (int j = 0; j < numero_Prof; j++) {
+				if (listaProf[j].Matricula == listaDisciplina[i].Matricula_Professor) {
+					puts("***Professor que leciona a Disciplina***");
+					printf("\n%d\n", listaProf[j].Matricula);
+					printf("%s\n", listaProf[j].Nome);
+					printf("%s\n", listaProf[j].CPF);
+					printf("%c\n", listaProf[j].Sexo);
+					printf("%d/%d/%d\n", listaProf[j].dataNasc.dia,
+								 listaProf[j].dataNasc.mes, listaProf[j].dataNasc.ano);
+					break;
+				}
+			}
+			puts("***Alunos Cadastrados***");
+			for(int j = 0; j < numero_Matriculado; j++){
+				for(int k = 0; k < numero_Aluno; k++){
+					if(listaDisciplina[i].listaMatriculados[j] == listaAlunos[k].Matricula){
+						printf("\n%d\n", listaAlunos[k].Matricula);
+						printf("%s\n", listaAlunos[k].Nome);
+						printf("%s\n", listaAlunos[k].CPF);
+						printf("%c\n", listaAlunos[k].Sexo);
+						printf("%d/%d/%d\n", listaAlunos[k].dataNasc.dia,
+									 listaAlunos[k].dataNasc.mes, listaAlunos[k].dataNasc.ano);
+					}
+				}
+			}
+		}
+	}
 }
