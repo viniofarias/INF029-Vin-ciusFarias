@@ -36,6 +36,7 @@ int excluirCadastro(struct Pessoa *lista, int matricula, int numero);
 void inserirDisciplina(struct Disciplina *listaDisciplina, struct Pessoa *listaProf, int numero_Prof, int numero_Disciplina);
 int deletarDisciplina(struct Disciplina *listaDisciplina, int numero_Disciplina);
 int inserirAlunoDisciplina(struct Disciplina *listaDisciplina, struct Pessoa *listaAlunos, int numero_Aluno, int numero_Disciplina, int numero_Matriculado);
+int deletarAlunoDisciplina(struct Disciplina *listaDisciplina, int numero_Disciplina, int numero_Matriculado);
 
 int main(void) {
   Pessoa listaAlunos[max_Alunos];
@@ -243,7 +244,13 @@ int main(void) {
 							break;
 						}
 						case 5:{
-							puts("===============Deletar aluno da Disciplina===============");
+							int status = deletarAlunoDisciplina(listaDisciplina,numero_Disciplina,numero_Matriculado);
+							if(status == 1){
+								puts("Aluno removido da disciplina");
+								numero_Matriculado--;
+							}else{
+								puts("Não foi possivel deletar aluno da disciplina");
+							}
 							break;
 						}
 						default:{
@@ -615,4 +622,29 @@ int inserirAlunoDisciplina(struct Disciplina *listaDisciplina, struct Pessoa *li
 		puts("Não existe disciplina com esse código");
 		return 0;
 	}
+}
+
+int deletarAlunoDisciplina(struct Disciplina *listaDisciplina, int numero_Disciplina, int numero_Matriculado){
+	int validaCodigo, posicaoDisciplina = 0, posicaoAluno = 0, validaMatricula;
+	puts("===============Deletar aluno da Disciplina===============");
+	puts("digite o codigo da disciplina que voce quer deletar o aluno");
+	scanf("%d",&validaCodigo);
+	for(int i = 0; i<numero_Disciplina; i++){
+		if(listaDisciplina[i].Codigo == validaCodigo){
+			posicaoDisciplina = i;
+			break;
+		}
+	}
+	puts("digite a matricula do aluno que voce quer deletar");
+	scanf("%d",&validaMatricula);
+	for(int i = 0; i<numero_Matriculado; i++){
+		if(listaDisciplina[posicaoDisciplina].listaMatriculados[i] == validaMatricula){
+			posicaoAluno = i;
+		}
+	}
+	listaDisciplina[posicaoDisciplina].listaMatriculados[posicaoAluno] = 0;
+	for(int i = posicaoAluno; i<numero_Matriculado-1;i++){
+		listaDisciplina[posicaoDisciplina].listaMatriculados[i] = listaDisciplina[posicaoDisciplina].listaMatriculados[i+1];
+	}
+	return 1;
 }
