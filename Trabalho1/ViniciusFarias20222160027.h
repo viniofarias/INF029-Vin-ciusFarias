@@ -7,7 +7,7 @@
 
 //  ----- Orientações gerais -----
 //  Descrição: esse arquivo deve conter as questões do trabalho do aluno.
-//  Cada aluno deve renomear esse arquivo para Aluno<MATRICULA>.c
+//  Cada aluno deve renomearf esse arquivo para Aluno<MATRICULA>.c
 //  O aluno deve preencher seus dados abaixo, e implementar as questões do trabalho
 
 //  ----- Dados do Aluno -----

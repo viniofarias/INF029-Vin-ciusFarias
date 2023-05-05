@@ -10,7 +10,7 @@
 //  o aluno pode incrementar os testes
 
 //  Copyright © 2016 Renato Novais. All rights reserved.
-// Última atualização: 19/08/2016 - 12/12/2018
+// Última atualização: 19/08/2016f - 12/12/2018
 
 // #################################################
 
